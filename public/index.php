@@ -10,7 +10,7 @@ if (empty($_SERVER['REQUEST_URI'])) {
 $url = parse_url($_SERVER['REQUEST_URI']);
 $analysis = explode('/', $url['path']);
 $call = null;
-echo 'test' . rand();
+//echo 'test' . rand();
 
 foreach ($analysis as $value) {
     if ($value !== "") {

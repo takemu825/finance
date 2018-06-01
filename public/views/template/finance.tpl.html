@@ -27,7 +27,7 @@
             console.log('onload 1');
         }
 
-        function changeItemType(el, type) {
+        function onChangeItemType(el, type) {
             window.location.href = 'http://localhost/finance?item_type=' + type;
         }
     </script>
@@ -37,38 +37,38 @@
 <body>
 <h1>＊＊：<?php echo $str; ?></h1>
 
-<form action="finance" name="myForm" method="POST">
-<table>
+<form action="finance" name="inputForm" method="POST">
+<table style="width: 100%;border: outset 10px;}">
+    <caption>入力フォーム</caption>
     <tbody>
         <tr>
             <th colspan="1" rowspan="1" style="width:15%;" class="input_ico">収支</th>
             <td colspan="3" rowspan="1">
                 <?php if($item_type == 'input') { ?>
-                    <input type="radio" id="type1" name="contents:form:type" value="1" title="支出" onChange="changeItemType(this, 'output')">
+                    <input type="radio" id="type1" name="contents:form:type" value="1" title="支出" onChange="onChangeItemType(this, 'output')">
                 <?php } else { ?>
-                    <input type="radio" id="type1" name="contents:form:type" checked="checked" value="1" title="支出" onChange="changeItemType(this, 'output')">
+                    <input type="radio" id="type1" name="contents:form:type" checked="checked" value="1" title="支出" onChange="onChangeItemType(this, 'output')">
                 <?php } ?>
 
                 <label for="type1">支出</label>
                 <br clear="none">
 
                 <?php if($item_type == 'input') { ?>
-                    <input type="radio" id="type2" name="contents:form:type" checked="checked" value="2" title="収入" onChange="changeItemType(this, 'input')">
+                    <input type="radio" id="type2" name="contents:form:type" checked="checked" value="2" title="収入" onChange="onChangeItemType(this, 'input')">
                 <?php } else { ?>
-                    <input type="radio" id="type2" name="contents:form:type" value="2" title="収入" onChange="changeItemType(this, 'input')">
+                    <input type="radio" id="type2" name="contents:form:type" value="2" title="収入" onChange="onChangeItemType(this, 'input')">
                 <?php } ?>
 
                 <label for="type2">収入</label>
                 <br clear="none">
-                <div id="typeMessage"></div>
             </td>
         </tr>
         <tr>
             <th colspan="1" rowspan="1">
-                <div class="input_ico_must">日付</div>
+                <div>日付</div>
             </th>
             <td colspan="3" rowspan="1">
-                <input type="date" id="date" name="contents:form:date" class="flat imedisable" title="日付" maxlength="10" size="10">
+                <input type="date" id="date" name="contents:form:date" title="日付" maxlength="10" size="10">
             </td>
         </tr>
         <tr>
@@ -76,10 +76,10 @@
                 <div class="input_ico_must">項目</div>
             </th>
             <td colspan="1" rowspan="1" width="33%">
-                <select id="categoryID" name="contents:form:categoryID" size="10" class="flat" title="項目" onchange="onChange_categoryID(this);" style="width:210px">
+                <select id="categoryID" name="contents:form:categoryID" size="10" class="flat" title="項目" style="width:210px">
                     <?php
                         foreach($items as $key => $value) {
-                          echo '<option value="">'.$value. '</option>';
+                          echo '<option value="' . $key . '">' . $value . '</option>';
                         }
                     ?>
                 </select>
@@ -87,9 +87,7 @@
         </tr>
         <tr id="productFrame" class="">
             <th colspan="1" rowspan="1" id="productLabel" class="input_ico">品目</th>
-            <td colspan="3" rowspan="1"><input type="text" id="product" name="contents:form:product" value="" class="flat imeon ac_input" title="商品名" maxlength="100" size="50" autocomplete="off">
-            <div id="productMessage"></div>
-            </div>
+            <td colspan="3" rowspan="1"><input type="text" id="product" name="contents:form:product" value="" title="商品名" maxlength="100" size="50" autocomplete="off">
             </td>
         </tr>
         <tr>
@@ -97,10 +95,8 @@
                 <div class="input_ico_must">金額</div>
             </th>
             <td colspan="3" rowspan="1">
-                <input type="text" id="amount" name="contents:form:amount" value="" onfocus="Teeda.THtmlInputCommaText.removeComma(this, ',');this.select();" onblur="onBlur_amount(this);Teeda.THtmlInputCommaText.convertByKey(this);Teeda.THtmlInputCommaText.addComma(this, 2, ',', '.');" onkeydown="return Teeda.THtmlInputCommaText.keycheckForNumber(event, this, 2, '.');" onkeypress="return Teeda.THtmlInputCommaText.keycheckForNumber(event, this, 2, '.');" onkeyup="Teeda.THtmlInputCommaText.convertByKey(this);" style="ime-mode:disabled;" class="T_currency flat textRight" onmouseup="setTimeout(function(){select()},0);" title="金額" maxlength="11" size="12">
+                <input type="text" id="amount" name="contents:form:amount" value="" title="金額" maxlength="11" size="12">
             </td>
-            <div id="amountMessage"></div>
-
         <tr>
             <th colspan="1" rowspan="1" style="width:15%;" class=""></th>
             <td colspan="3" rowspan="1">
@@ -112,6 +108,34 @@
 </form>
 
 
-</body>
+<table style="width: 100%;border: outset 10px;margin-top:100px;">
+<tbody>
+    <caption>履歴</caption>
+    <?php
+        foreach($current as $key => $value) {
+            echo '
+                <tr>
+                <th>'. $value[1] .'</th>
+                <td>'. $value[0] .'</td>
+                <td>'. $value[2] .'</td>
+                <td>'. $value[3] .'</td>
+                <td>'. $value[4] .'</td>
+                </tr>
+            ';
+        }
+    ?>
+</tbody>
+</table>
 
+<form action="finance" name="aggregateForm" method="GET" style="margin-top: 100px;">
+    <span>集計</span>
+    <input type="date" id="start_date" value="<?php echo $start_date; ?>" name="contents:form:start_date" title="日付" maxlength="10" size="10">
+    <input type="date" id="end_date" value="<?php echo $end_date; ?>" name="contents:form:end_date" title="日付" maxlength="10" size="10">
+    <button type='submit' id="execute">実行</button>
+    <div>
+        合計：<?php echo $sum; ?>円
+    </div>
+</form>
+
+</body>
 </html>
