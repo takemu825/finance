@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <script type="text/javascript">
+
+//        function triggerEvent(element, event) {
+//            if (document.createEvent) {
+//                // IE以外
+//                var evt = document.createEvent("HTMLEvents");
+//                evt.initEvent(event, true, true ); // event type, bubbling, cancelable
+//                return element.dispatchEvent(evt);
+//            } else {
+//                // IE
+//                var evt = document.createEventObject();
+//                return element.fireEvent("on"+event, evt)
+//            }
+//        }
+
+        var test = function init() {
+            var el = document.getElementById('test');
+            el.addEventListener('click', function (event) {
+                console.log(event.type + ' got fired')
+            })
+        }
+
+        function ready(fn) {
+            if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+                fn();
+            } else {
+                document.addEventListener('DOMContentLoaded', fn);
+            }
+        }
+
+        ready(test);
+
+        window.onload = function() {
+            console.log('onload 1');
+        }
+    </script>
+
+</head>
+
+<body>
+<h1>＊＊：<?php echo $str; ?></h1>
+
+<button id="test">登録</button>
+</body>
+
+</html>
