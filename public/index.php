@@ -7,16 +7,16 @@ if (empty($_SERVER['REQUEST_URI'])) {
     exit;
 }
 
-$analysis = explode('/', $_SERVER['REQUEST_URI']);
+$url = parse_url($_SERVER['REQUEST_URI']);
+$analysis = explode('/', $url['path']);
 $call = null;
+echo 'test' . rand();
 
 foreach ($analysis as $value) {
-
     if ($value !== "") {
         $call = $value;
         break;
     }
-
 }
 
 if ($call == null) {
@@ -27,8 +27,15 @@ if ($call == null) {
 if (file_exists('./models/'.$call.'.php')) {
 
     include('./models/'.$call.'.php');
+
+    $post_date = $_POST;
     $class = new $call();
-    $ret = $class->index($analysis);
+    if (!empty($post_date)) {
+        var_dump($post_date);
+        $ret = $class->create($_POST);
+    } else {
+        $ret = $class->index($_GET);
+    }
     if (!is_null($ret)) {
         if(is_array($ret)){
             extract($ret);
