@@ -50,6 +50,11 @@ class finance {
         fclose($fp);
         $sum = $this->calculate($current, $start_date, $end_date);
 
+        foreach($current as $key => $val){
+            $updated[$key] = $val[1];
+        }
+        array_multisort($updated, SORT_DESC, $current);
+
         return [
             'str'=>'Hello 家計簿!',
             'item_type' => $item_type,
